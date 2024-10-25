@@ -1,11 +1,13 @@
 import ApiClient from "@/core/apiClient";
 
 export class AccountService {
-    private client: ApiClient;
+    private readonly client: ApiClient;
 
     constructor(client: ApiClient) {
         this.client = client;
     }
 
-    public async getAccount() {}
+    public async getAccount() {
+        return await this.client.get("/");
+    }
 }

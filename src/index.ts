@@ -2,8 +2,6 @@ import { AxiosRequestConfig } from "axios";
 import ApiClient from "./core/apiClient";
 import { Accounts, Customers, Transactions } from "./services";
 
-
-
 export default class Finatava {
     private readonly accounts: Accounts;
     private readonly customers: Customers;
@@ -15,11 +13,7 @@ export default class Finatava {
         private readonly options: AxiosRequestConfig = {},
     ) {
         try {
-            const client = new ApiClient(
-                process.env.FINTAVA_API_KEY || this.apiKey,
-                this.env,
-                this.options,
-            );
+            const client = new ApiClient(this.apiKey, this.env, this.options);
             this.accounts = new Accounts(client);
             this.customers = new Customers(client);
             this.transactions = new Transactions(client);
