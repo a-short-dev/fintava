@@ -3,20 +3,21 @@ name: Test and Release Package
 on:
   push:
     branches:
-      - main
+      - main  # Run this workflow on pushes to the main branch
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout the code
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 18.x  # Use the node version you need
-          registry-url: 'https://registry.npmjs.org/'
+          node-version: 18.x
+          registry-url: 'https://registry.npmjs.org/'  # Set NPM registry
 
       - name: Install pnpm
         run: npm install -g pnpm
@@ -24,14 +25,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run Tests
-        run: pnpm test # Assuming you have tests configured in your package.json
+      - name: Build project
+        run: pnpm build
+
+      - name: Run tests
+        run: pnpm test
 
   release:
-    needs: test  # Ensures release only runs if tests succeed
+    needs: test  # Only run if tests pass
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the code
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Setup Node.js
@@ -46,12 +50,23 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Create version and test publish
+      - name: Create version bump
         run: |
-          pnpm changeset version
-          pnpm publish --dry-run  # Dry run for testing
+          pnpx changeset version  # Bumps version according to changesets
+          pnpm install  # Reinstall after version bump to update lockfile
+
+      - name: Push version update
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Version bump from changesets"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to NPM
+        run: |
+          pnpm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Verify release
-        run: echo "Dry run completed successfully."
