@@ -30,6 +30,8 @@ jobs:
 
       - name: Run tests
         run: pnpm test
+				env: 
+         FINTAVA_API_KEY: ${{ secrets.FINATAVA_API_KEY }}
 
   release:
     needs: test  # Only run if tests pass
@@ -70,3 +72,4 @@ jobs:
           pnpm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          FINTAVA_API_KEY: ${{ secrets.FINATAVA_API_KEY }}
