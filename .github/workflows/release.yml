@@ -15,8 +15,12 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 16
+          node-version: 16  # Use the node version you need
           registry-url: 'https://registry.npmjs.org/'
+
+      - name: Install pnpm
+        run: |
+          npm install -g pnpm
 
       - name: Install dependencies
         run: pnpm install
@@ -25,3 +29,5 @@ jobs:
         run: |
           pnpm changeset version
           pnpm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
