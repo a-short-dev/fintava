@@ -1,5 +1,0 @@
----
-"fintava": patch
----
-
-Fix issues
