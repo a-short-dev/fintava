@@ -1,10 +1,10 @@
 name: Test on Development Branch
 
 on:
-	push:
-			branches:
-					- development # Only run this workflow on pushes to the development branch
-
+  push:
+    branches:
+      - development
+			
 jobs:
   test:
     runs-on: ubuntu-latest
