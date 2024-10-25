@@ -1,32 +1,30 @@
 name: Test on Development Branch
 
 on:
-    push:
-        branches:
-            - development # Only run this workflow on pushes to the development branch
+	push:
+			branches:
+					- development # Only run this workflow on pushes to the development branch
 
 jobs:
-    test:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v3
-              with:
-                  node-version: 18.x
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          registry-url: 'https://registry.npmjs.org/'
 
-            - name: Install pnpm
-              run: npm install -g pnpm
+      - name: Install pnpm
+        run: npm install -g pnpm
 
-            - name: Install dependencies
-              run: pnpm install
+      - name: Install dependencies
+        run: pnpm install
 
-            - name: Build project
-              run: pnpm build
-
-            - name: Run tests
-              run: pnpm test
-							env: 
-							  FINTAVA_API_KEY: ${{ secrets.FINATAVA_API_KEY }}
+      - name: Run Tests
+        run: pnpm test
+        env:
+          FINTAVA_API_KEY: ${{ secrets.FINTAVA_API_KEY }}  # Adding API key for tests

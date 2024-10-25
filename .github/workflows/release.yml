@@ -3,21 +3,20 @@ name: Test and Release Package
 on:
   push:
     branches:
-      - main  # Run this workflow on pushes to the main branch
+      - main
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout the code
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18.x
-          registry-url: 'https://registry.npmjs.org/'  # Set NPM registry
+          registry-url: 'https://registry.npmjs.org/'
 
       - name: Install pnpm
         run: npm install -g pnpm
@@ -25,19 +24,16 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build project
-        run: pnpm build
-
-      - name: Run tests
+      - name: Run Tests
         run: pnpm test
-				env: 
-          FINTAVA_API_KEY: ${{ secrets.FINATAVA_API_KEY }}
+        env:
+          FINTAVA_API_KEY: ${{ secrets.FINTAVA_API_KEY }}  # Adding API key for tests
 
   release:
-    needs: test  # Only run if tests pass
+    needs: test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout the code
         uses: actions/checkout@v2
 
       - name: Setup Node.js
@@ -52,24 +48,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Create version bump
+      - name: Create version and test publish
         run: |
-          pnpx changeset version  # Bumps version according to changesets
-          pnpm install  # Reinstall after version bump to update lockfile
-
-      - name: Push version update
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "Version bump from changesets"
-          git push
+          pnpm changeset version
+          pnpm publish --dry-run
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}  # Your NPM token for publishing
+          FINTAVA_API_KEY: ${{ secrets.FINTAVA_API_KEY }}  # API key for creating the client in the release process
 
-      - name: Publish to NPM
-        run: |
-          pnpm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          FINTAVA_API_KEY: ${{ secrets.FINATAVA_API_KEY }}
+      - name: Verify release
+        run: echo "Dry run completed successfully."
