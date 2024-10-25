@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from "axios";
 import ApiClient from "./core/apiClient";
 import { Accounts, Customers, Transactions } from "./services";
 
-export type Options = {};
+
 
 export default class Finatava {
     private readonly accounts: Accounts;

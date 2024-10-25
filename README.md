@@ -14,10 +14,11 @@ pnpm add fintava
 ```ts
 import Fintava from "fintava";
 
-const fintava = new Fintava({
+
+const fintava = new Fintava(
     apiKey: process.env.FINTAVA_API_KEY,
     env: "test",
-});
+);
 ```
 
 ### Resources
