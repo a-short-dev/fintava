@@ -1,17 +1,16 @@
 {
     "name": "fintava",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "files": [
         "/dist"
     ],
-		"repository": {
-			"type": "git",
-			"url": "https://github.com/a-short-dev/finatava/"
-
-		},
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/a-short-dev/finatava/"
+    },
     "scripts": {
         "build": "tsc --build"
     },
