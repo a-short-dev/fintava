@@ -21,17 +21,22 @@ export class CustomersService {
         if (!validation.success) {
             throw new Error(`Validation failed: ${validation.error.message}`);
         }
-        return await this.client.post<CustomerResponse>("create/customer", {
-            firstName: param.first_name,
-            lastName: param.last_name,
-            phoneNumber: param.phone_number,
-            email: param.email,
-            fundingMethod: param.funding_method,
-            address: param.address,
-            dateOfBirth: param.date_of_birth,
-            bvn: param.bvn,
-            nin: param.bvn,
-        });
+        const newCustomer = await this.client.post<CustomerResponse>(
+            "create/customer",
+            {
+                firstName: param.first_name,
+                lastName: param.last_name,
+                phoneNumber: param.phone_number,
+                email: param.email,
+                fundingMethod: param.funding_method,
+                address: param.address,
+                dateOfBirth: param.date_of_birth,
+                bvn: param.bvn,
+                nin: param.bvn,
+            },
+        );
+
+        return newCustomer;
     }
 
     public async getCustomers(query: Partial<QueryParams> = {}) {
@@ -62,9 +67,11 @@ export class CustomersService {
             queryParams.append("endDate", query.endDate);
         }
 
-        return await this.client.get<CustomerResponse[]>(
+        const cus = await this.client.get<any>(
             `/customers/list?${queryParams.toString()}`,
         );
+
+        return cus;
     }
 
     public async fetchCustomerById(customer_id: string) {

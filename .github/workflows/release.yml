@@ -1,4 +1,4 @@
-name: Release Package
+name: Test and Release Package
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  release:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
@@ -19,15 +19,39 @@ jobs:
           registry-url: 'https://registry.npmjs.org/'
 
       - name: Install pnpm
-        run: |
-          npm install -g pnpm
+        run: npm install -g pnpm
 
       - name: Install dependencies
         run: pnpm install
 
-      - name: Create and publish release
+      - name: Run Tests
+        run: pnpm test # Assuming you have tests configured in your package.json
+
+  release:
+    needs: test  # Ensures release only runs if tests succeed
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.x
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Create version and test publish
         run: |
           pnpm changeset version
-          pnpm publish
+          pnpm publish --dry-run  # Dry run for testing
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Verify release
+        run: echo "Dry run completed successfully."

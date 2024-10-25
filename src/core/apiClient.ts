@@ -1,9 +1,4 @@
-import axios, {
-    Axios,
-    AxiosError,
-    AxiosInstance,
-    AxiosRequestConfig,
-} from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
 import { ErrorResponse } from "./types/error";
 import { handleAxiosError } from "./utils/util";
 
@@ -20,13 +15,13 @@ export default class ApiClient {
         const baseUrl =
             this.env === "prod"
                 ? "https://live.fintavapay.com/api/dev"
-                : "https://api.fintavapay.com/api/dev";
+                : "https://dev.fintavapay.com/api/dev";
 
         const defaultConfig: AxiosRequestConfig = {
             baseURL: baseUrl,
             headers: {
-                Authorization: `Bearer ${this.apiKey}`,
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${this.apiKey}`,
             },
         };
 
@@ -45,10 +40,10 @@ export default class ApiClient {
     // Generic GET method
     public async get<T>(
         endpoint: string,
-        params = {},
+        data = {},
     ): Promise<T | ErrorResponse> {
         try {
-            return await this.client.get(endpoint, { params });
+            return await this.client.get(endpoint, data);
         } catch (error) {
             if (error instanceof AxiosError) return handleAxiosError(error);
             throw error;
@@ -61,20 +56,20 @@ export default class ApiClient {
         data = {},
     ): Promise<T | ErrorResponse> {
         try {
-            return await this.client.post(endpoint, { data });
+            return await this.client.post(endpoint, data);
         } catch (error) {
             if (error instanceof AxiosError) return handleAxiosError(error);
             throw error;
         }
     }
 
-    // Generic PUT method
+    // Generic PATCH method
     public async patch<T>(
         endpoint: string,
-        params = {},
+        data = {},
     ): Promise<T | ErrorResponse> {
         try {
-            return await this.client.put(endpoint, { params });
+            return await this.client.patch(endpoint, data);
         } catch (error) {
             if (error instanceof AxiosError) return handleAxiosError(error);
             throw error;
@@ -84,10 +79,10 @@ export default class ApiClient {
     // Generic PUT method
     public async put<T>(
         endpoint: string,
-        params = {},
+        data = {},
     ): Promise<T | ErrorResponse> {
         try {
-            return await this.client.put(endpoint, { params });
+            return await this.client.put(endpoint, data);
         } catch (error) {
             if (error instanceof AxiosError) return handleAxiosError(error);
             throw error;
@@ -100,7 +95,7 @@ export default class ApiClient {
         data = {},
     ): Promise<T | ErrorResponse> {
         try {
-            return await this.client.delete(endpoint, { data });
+            return await this.client.delete(endpoint, data);
         } catch (error) {
             if (error instanceof AxiosError) return handleAxiosError(error);
             throw error;
