@@ -14,7 +14,8 @@
     "scripts": {
         "build": "tsc --build",
         "dev": "tsc --watch",
-        "test": "jest"
+        "test": "jest",
+        "ci:version": "changeset version && pnpm install --no-frozen-lockfile"
     },
     "keywords": [],
     "author": "",
