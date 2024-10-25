@@ -1,5 +1,11 @@
 # fintava
 
+## 1.0.3
+
+### Patch Changes
+
+-   67eb5cc: fix customer services and test
+
 ## 1.0.2
 
 ### Patch Changes
