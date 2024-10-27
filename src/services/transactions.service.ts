@@ -1,11 +1,10 @@
 import ApiClient from "@/core/apiClient";
-import { QueryParams, querySchema } from "./types";
+import { QueryParams, querySchema } from "./schema";
+import BaseService from "./base.service";
 
-export class TransactionService {
-    private readonly client: ApiClient;
-
+export class TransactionService extends BaseService {
     constructor(client: ApiClient) {
-        this.client = client;
+        super(client);
     }
 
     /**
@@ -34,11 +33,39 @@ export class TransactionService {
     public async fetchVirtualCardTxns(
         query: Partial<QueryParams> = {},
     ): Promise<any> {
-			const validatation = querySchema.safeParse(query)
+        const validatation = querySchema.safeParse(query);
 
-			if(validatation)
+        if (!validatation.success) {
+            throw new Error("Validation error");
+        }
         return await this.client.get(
             `/transaction/card?customerId=${query.customer_id}`,
+        );
+    }
+
+    /**
+     * Find Transaction By Id
+     * Use this function to search for a transaction using the transaction id
+     *
+     * @param {string} transaction_id
+     *
+     * @returns {Promise<any>} - Returns a promise that resolves with the transaction data
+     */
+    public async fetchTransactionById(transaction_id: string): Promise<any> {
+        return await this.client.get(`/transaction/id/${transaction_id}`);
+    }
+
+    /**
+     * Find Transaction using transaction reference
+     * Use this function to search for a transaction using the transaction id
+     *
+     * @param {string} transaction_ref
+     *
+     * @returns {Promise<any>} - Returns a promise that resolves with the transaction data
+     */
+    public async fetchTransactionByRef(transaction_ref: string): Promise<any> {
+        return await this.client.get(
+            `/transaction/reference/${transaction_ref}`,
         );
     }
 }

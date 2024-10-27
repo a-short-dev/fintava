@@ -5,7 +5,7 @@ import {
     customerSchema,
     QueryParams,
     querySchema,
-} from "./types";
+} from "./schema";
 
 export class CustomersService {
     private readonly client: ApiClient;

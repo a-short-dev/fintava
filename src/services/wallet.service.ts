@@ -1,14 +1,54 @@
 import ApiClient from "@/core/apiClient";
+
 import {
     generateVirtualWalletSchema,
     GenerateVirtualWalletSchema,
-} from "./types";
+    WalletToWalletSchema,
+} from "./schema";
 
-export class WalletService {
-    private readonly client: ApiClient;
+import BaseService from "./base.service";
 
+export class WalletService extends BaseService {
     constructor(client: ApiClient) {
-        this.client = client;
+        super(client);
+    }
+
+    /**
+     * Get the details of any wallet on fintava.
+     *
+     * @param {string} account_number - this users account number
+     *
+     * @returns {Promise<any>} - Returns a promise that resolves with the wallet details
+     */
+
+    public async getWalletDetails(account_number: string): Promise<any> {
+        return await this.client.get(
+            `/loma-name/enquiry?accountNumber=${account_number}`,
+        );
+    }
+
+    /**
+     * Transfer from one fintava wallet to another fintava wallet
+     *
+     * @param {WalletToWalletSchema} params - an object that specifies
+     *   - `sender_account (string): This is the senders account number
+     *   - `receiver` (string): This is the receiver account number
+     *   - `amount` (number): Amount you want to send
+     *   - `customer_reference` (string)
+     *
+     * @returns {Promise<any>} - Returns a promise that resolves with the wallet details
+     */
+
+    public async walletTransfer(
+        params: Readonly<WalletToWalletSchema>,
+    ): Promise<any> {
+        return await this.client.post(`/transaction/wallet-to-wallet`);
+    }
+}
+
+export class VirtualWalletService extends BaseService {
+    constructor(client: ApiClient) {
+        super(client);
     }
 
     /**
@@ -24,7 +64,7 @@ export class WalletService {
      * @returns
      */
 
-    public async generateVirtualWallet(params: GenerateVirtualWalletSchema) {
+    public async generateWallet(params: GenerateVirtualWalletSchema) {
         const validate = generateVirtualWalletSchema.safeParse(params);
 
         if (!validate.success) {
@@ -33,11 +73,27 @@ export class WalletService {
         return await this.client.post("/virtual-wallet/generate", {
             customerName: params.customer_name,
             expireTimeInMin: params.expire_time_in_min,
-            merchantReferenc: params.merchant_reference,
+            merchantReference: params.merchant_reference,
             description: params.description,
             amount: params.amount,
             phone: params.phone,
             email: params.email,
         });
+    }
+
+    public async bactchCreate(params: GenerateVirtualWalletSchema[]) {
+        return await this.client.post(`virtual-wallet/generate/batch`);
+    }
+
+    /**
+     * Get the details of a virtual wallet you've generated. Details include, payment status, and wallet's status (active/disabled).
+     *
+     * @param {string} wallet_id
+     *
+     * @returns {Promise<any>} - Returns a promise that resolves with the wallet details
+     */
+
+    public async getWalletDetails(wallet_id: string): Promise<any> {
+        return await this.client.get(`/virtual-wallet/${wallet_id}`);
     }
 }

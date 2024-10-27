@@ -96,3 +96,13 @@ export const generateVirtualWalletSchema = z.object({
 export type GenerateVirtualWalletSchema = z.infer<
     typeof generateVirtualWalletSchema
 >;
+
+export const walletToWalletSchema = z.object({
+    sender_account: z.string(),
+    receiver: z.string(),
+    narration: z.string().optional(),
+    amount: z.number(),
+    customer_reference: z.string(),
+});
+
+export type WalletToWalletSchema = z.infer<typeof walletToWalletSchema>;
