@@ -1,10 +1,10 @@
 import { WalletService, VirtualWalletService } from "./wallet.service";
 import { CustomersService } from "./customer.service";
-import { AccountService } from "./accounts.service";
+import { BankService } from "./bank.service";
 import { TransactionService } from "./transactions.service";
 
 export {
-    AccountService as Accounts,
+    BankService as Bank,
     CustomersService as Customers,
     TransactionService as Transactions,
     WalletService as Wallet,
