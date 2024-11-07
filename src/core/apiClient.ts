@@ -38,66 +38,56 @@ export default class ApiClient {
     }
 
     // Generic GET method
-    public async get<T>(
-        endpoint: string,
-        data = {},
-    ): Promise<T | ErrorResponse> {
+    public async get<T>(endpoint: string, param = {}): Promise<T> {
         try {
-            return await this.client.get(endpoint, data);
+            const { data } = await this.client.get(endpoint, param);
+            return data;
         } catch (error) {
-            if (error instanceof AxiosError) return handleAxiosError(error);
+            if (error instanceof AxiosError) throw handleAxiosError(error);
             throw error;
         }
     }
 
     // Generic POST method
-    public async post<T>(
-        endpoint: string,
-        data = {},
-    ): Promise<T | ErrorResponse> {
+    public async post<T>(endpoint: string, param = {}): Promise<T> {
         try {
-            return await this.client.post(endpoint, data);
+            const { data } = await this.client.post(endpoint, param);
+            return data;
         } catch (error) {
-            if (error instanceof AxiosError) return handleAxiosError(error);
+            if (error instanceof AxiosError) throw handleAxiosError(error);
             throw error;
         }
     }
 
     // Generic PATCH method
-    public async patch<T>(
-        endpoint: string,
-        data = {},
-    ): Promise<T | ErrorResponse> {
+    public async patch<T>(endpoint: string, param = {}): Promise<T> {
         try {
-            return await this.client.patch(endpoint, data);
+            const { data } = await this.client.patch(endpoint, param);
+            return data;
         } catch (error) {
-            if (error instanceof AxiosError) return handleAxiosError(error);
+            if (error instanceof AxiosError) throw handleAxiosError(error);
             throw error;
         }
     }
 
     // Generic PUT method
-    public async put<T>(
-        endpoint: string,
-        data = {},
-    ): Promise<T | ErrorResponse> {
+    public async put<T>(endpoint: string, param = {}): Promise<T> {
         try {
-            return await this.client.put(endpoint, data);
+            const { data } = await this.client.put(endpoint, param);
+            return data;
         } catch (error) {
-            if (error instanceof AxiosError) return handleAxiosError(error);
+            if (error instanceof AxiosError) throw handleAxiosError(error);
             throw error;
         }
     }
 
     // Generic DELETE method
-    public async _delete<T>(
-        endpoint: string,
-        data = {},
-    ): Promise<T | ErrorResponse> {
+    public async _delete<T>(endpoint: string, param = {}): Promise<T> {
         try {
-            return await this.client.delete(endpoint, data);
+            const { data } = await this.client.delete(endpoint, param);
+            return data;
         } catch (error) {
-            if (error instanceof AxiosError) return handleAxiosError(error);
+            if (error instanceof AxiosError) throw handleAxiosError(error);
             throw error;
         }
     }

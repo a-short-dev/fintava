@@ -106,3 +106,31 @@ export const walletToWalletSchema = z.object({
 });
 
 export type WalletToWalletSchema = z.infer<typeof walletToWalletSchema>;
+
+export const banksResponseSchema = z.object({
+    data: z.object({
+        id: z.string(),
+        createdAt: z.string(),
+        updatedAt: z.string(),
+        code: z.string(),
+        name: z.string(),
+    }),
+    status: z.number(), // Validating as an HTTP status code
+    message: z.string(),
+});
+
+export type BanksResponseSchema = z.infer<typeof banksResponseSchema>;
+
+export const bankDetailResponseSchema = z.object({
+    data: z.object({
+        status: z.boolean(),
+        account: z.object({
+            bankCode: z.string(),
+            accountName: z.string(),
+            accountNumber: z.string(),
+            responseCode: z.string(),
+        }),
+    }),
+    status: z.number(), // Validating as an HTTP status code
+    message: z.string(),
+});

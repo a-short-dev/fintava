@@ -42,8 +42,16 @@ export class WalletService extends BaseService {
     public async walletTransfer(
         params: Readonly<WalletToWalletSchema>,
     ): Promise<any> {
-        return await this.client.post(`/transaction/wallet-to-wallet`);
+        return await this.client.post(`/transaction/wallet-to-wallet`, {
+            senderAccount: params.sender_account,
+            receiverAccount: params.receiver,
+            narrations: params.narration,
+            amount: params.amount,
+            CustomerReference: params.customer_reference,
+        });
     }
+
+    public async walletToBank() {}
 }
 
 export class VirtualWalletService extends BaseService {
