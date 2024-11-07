@@ -60,10 +60,10 @@ export class BankService extends BaseService {
 
     /**
      * Check or get details about a bank account details
-     * @param sort_code
-     * @param account_name
+     * @param {string} sort_code - This is the bank code.
+     * @param {string} account_number - The bank account number.
      *
-     * @returns {Promise<any>}
+     * @returns {Promise<any>} will return with a Promise of a reponse or the bank details.
      */
 
     async enquiry(sort_code: string, account_number: string): Promise<any> {
