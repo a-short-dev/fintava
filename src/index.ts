@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import ApiClient from "./core/apiClient";
 import {
-    Accounts,
+    Bank,
     Customers,
     Transactions,
     VirtualWallet,
@@ -9,7 +9,7 @@ import {
 } from "./services";
 
 export default class Finatava {
-    private readonly accounts: Accounts;
+    private readonly bank: Bank;
     private readonly customers: Customers;
     private readonly transactions: Transactions;
     private readonly virtualWallet: VirtualWallet;
@@ -22,7 +22,7 @@ export default class Finatava {
     ) {
         try {
             const client = new ApiClient(this.apiKey, this.env, this.options);
-            this.accounts = new Accounts(client);
+            this.bank = new Bank(client);
             this.customers = new Customers(client);
             this.transactions = new Transactions(client);
             this.virtualWallet = new VirtualWallet(client);
@@ -33,8 +33,8 @@ export default class Finatava {
         }
     }
 
-    public accountServices(): Accounts {
-        return this.accounts;
+    public bankService(): Bank {
+        return this.bank;
     }
 
     public customerServices(): Customers {
