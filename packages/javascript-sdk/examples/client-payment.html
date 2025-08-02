@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fintava Payment Example</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .note {
+            background: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Fintava Payment Demo</h1>
+        
+        <div class="note">
+            <strong>Note:</strong> This is a demo using test keys. No real money will be charged.
+        </div>
+
+        <form id="paymentForm">
+            <div class="form-group">
+                <label for="amount">Amount (₦)</label>
+                <input type="number" id="amount" value="100" min="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Customer Email</label>
+                <input type="email" id="email" value="customer@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Customer Name</label>
+                <input type="text" id="name" value="John Doe" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" value="+2348012345678">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" id="description" value="Payment for services">
+            </div>
+
+            <button type="submit" id="payButton">Pay Now</button>
+        </form>
+
+        <div id="result" class="result"></div>
+
+        <div style="margin-top: 30px;">
+            <h3>Payment Status Check</h3>
+            <div class="form-group">
+                <label for="reference">Transaction Reference</label>
+                <input type="text" id="reference" placeholder="Enter transaction reference">
+            </div>
+            <button type="button" id="checkStatus">Check Payment Status</button>
+        </div>
+    </div>
+
+    <!-- Include Fintava SDK -->
+    <script src="https://unpkg.com/fintava-pay@latest/dist/index.umd.js"></script>
+    <!-- Or if using modules: -->
+    <!-- <script type="module" src="./fintava-client-example.js"></script> -->
+    
+    <script>
+        // Initialize Fintava Checkout
+        const checkout = FintavaPay.Client({
+            publicKey: 'pk_test_your_public_key_here', // Replace with your actual test public key
+            theme: {
+                primaryColor: '#007bff',
+                backgroundColor: '#ffffff',
+                textColor: '#333333',
+                borderRadius: '8px'
+            },
+            modal: {
+                showCloseButton: true,
+                closeOnOverlayClick: true
+            }
+        });
+
+        // Handle payment form submission
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const amount = parseFloat(document.getElementById('amount').value) * 100; // Convert to kobo
+            const email = document.getElementById('email').value;
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const description = document.getElementById('description').value;
+            const reference = 'fintava_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            
+            // Disable the button
+            const payButton = document.getElementById('payButton');
+            payButton.disabled = true;
+            payButton.textContent = 'Processing...';
+            
+            // Show info message
+            showResult('Opening payment modal...', 'info');
+            
+            // Open payment modal
+            checkout.open({
+                amount: amount,
+                currency: 'NGN',
+                reference: reference,
+                customerEmail: email,
+                customerName: name,
+                customerPhone: phone,
+                description: description,
+                metadata: {
+                    source: 'web_demo',
+                    timestamp: new Date().toISOString()
+                },
+                onSuccess: function(response) {
+                    console.log('Payment successful:', response);
+                    showResult(
+                        `Payment Successful!<br>
+                        Reference: ${response.reference}<br>
+                        Amount: ₦${(response.amount / 100).toFixed(2)}<br>
+                        Transaction ID: ${response.transactionId}<br>
+                        Channel: ${response.channel}`,
+                        'success'
+                    );
+                    
+                    // Store reference for status checking
+                    document.getElementById('reference').value = response.reference;
+                    
+                    // Re-enable button
+                    payButton.disabled = false;
+                    payButton.textContent = 'Pay Now';
+                },
+                onError: function(error) {
+                    console.error('Payment failed:', error);
+                    showResult(
+                        `Payment Failed: ${error.message || 'Unknown error occurred'}`,
+                        'error'
+                    );
+                    
+                    // Re-enable button
+                    payButton.disabled = false;
+                    payButton.textContent = 'Pay Now';
+                },
+                onClose: function() {
+                    console.log('Payment modal closed');
+                    showResult('Payment modal was closed', 'info');
+                    
+                    // Re-enable button
+                    payButton.disabled = false;
+                    payButton.textContent = 'Pay Now';
+                }
+            });
+        });
+
+        // Handle payment status check
+        document.getElementById('checkStatus').addEventListener('click', async function() {
+            const reference = document.getElementById('reference').value.trim();
+            
+            if (!reference) {
+                showResult('Please enter a transaction reference', 'error');
+                return;
+            }
+            
+            const checkButton = this;
+            checkButton.disabled = true;
+            checkButton.textContent = 'Checking...';
+            
+            try {
+                const status = await FintavaPay.getPaymentStatus(reference, 'pk_test_your_public_key_here');
+                
+                showResult(
+                    `Payment Status: ${status.status.toUpperCase()}<br>
+                    Reference: ${status.reference}<br>
+                    Amount: ₦${(status.amount / 100).toFixed(2)}<br>
+                    Currency: ${status.currency}<br>
+                    ${status.paidAt ? `Paid At: ${new Date(status.paidAt).toLocaleString()}` : ''}
+                    ${status.failureReason ? `Failure Reason: ${status.failureReason}` : ''}`,
+                    status.status === 'successful' ? 'success' : 
+                    status.status === 'failed' ? 'error' : 'info'
+                );
+            } catch (error) {
+                console.error('Status check failed:', error);
+                showResult(`Status check failed: ${error.message}`, 'error');
+            } finally {
+                checkButton.disabled = false;
+                checkButton.textContent = 'Check Payment Status';
+            }
+        });
+
+        // Utility function to show results
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = message;
+            resultDiv.className = `result ${type}`;
+            resultDiv.style.display = 'block';
+            
+            // Auto-hide info messages after 5 seconds
+            if (type === 'info') {
+                setTimeout(() => {
+                    resultDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // Example of legacy widget usage (alternative approach)
+        function useLegacyWidget() {
+            FintavaPay.renderPaymentWidget({
+                publicKey: 'pk_test_your_public_key_here',
+                amount: 10000, // ₦100.00 in kobo
+                currency: 'NGN',
+                reference: 'legacy_' + Date.now(),
+                customerEmail: 'customer@example.com',
+                customerName: 'John Doe',
+                description: 'Legacy widget payment',
+                onSuccess: function(response) {
+                    console.log('Legacy payment successful:', response);
+                },
+                onError: function(error) {
+                    console.error('Legacy payment failed:', error);
+                },
+                onClose: function() {
+                    console.log('Legacy payment widget closed');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

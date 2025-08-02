@@ -27,7 +27,7 @@
     "allowSyntheticDefaultImports": true,
 
     /* Output */
-    "types": ["node"],
+    "types": ["node", "jest"],
     "resolveJsonModule": true                   // Optional: useful for reading JSON
   },
   "include": ["src/**/*"],

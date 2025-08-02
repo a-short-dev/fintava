@@ -4,13 +4,34 @@ out
 build
 node_modules
 
+# Package-specific builds
+packages/*/dist
+packages/*/build
+packages/*/out
+packages/*/node_modules
+
 # Logs
 *.log*
 logs
 
-# Enviroment
+# Environment
 *.env*
 .env
 
-# Misc
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
 .DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
+*.lcov
+
+# Temporary files
+*.tmp
+*.temp
