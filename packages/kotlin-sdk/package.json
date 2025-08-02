@@ -1,0 +1,28 @@
+{
+  "name": "@fintava/kotlin-sdk",
+  "version": "1.0.0",
+  "description": "Fintava Pay SDK for Android (Kotlin)",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/a-short-dev/fintava.git",
+    "directory": "packages/kotlin-sdk"
+  },
+  "keywords": [
+    "fintava",
+    "payment",
+    "gateway",
+    "sdk",
+    "android",
+    "kotlin"
+  ],
+  "author": "Oluwaleke Abiodun <you@example.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "echo 'Kotlin SDK build not implemented yet'",
+    "test": "echo 'Kotlin SDK tests not implemented yet'",
+    "lint": "echo 'Kotlin SDK linting not implemented yet'",
+    "format": "echo 'Kotlin SDK formatting not implemented yet'",
+    "clean": "echo 'Kotlin SDK clean not implemented yet'"
+  }
+}

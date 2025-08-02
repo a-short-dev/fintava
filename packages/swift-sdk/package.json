@@ -1,0 +1,29 @@
+{
+  "name": "@fintava/swift-sdk",
+  "version": "1.0.0",
+  "description": "Fintava Pay SDK for iOS and macOS (Swift)",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/a-short-dev/fintava.git",
+    "directory": "packages/swift-sdk"
+  },
+  "keywords": [
+    "fintava",
+    "payment",
+    "gateway",
+    "sdk",
+    "ios",
+    "macos",
+    "swift"
+  ],
+  "author": "Oluwaleke Abiodun <you@example.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "echo 'Swift SDK build not implemented yet'",
+    "test": "echo 'Swift SDK tests not implemented yet'",
+    "lint": "echo 'Swift SDK linting not implemented yet'",
+    "format": "echo 'Swift SDK formatting not implemented yet'",
+    "clean": "echo 'Swift SDK clean not implemented yet'"
+  }
+}

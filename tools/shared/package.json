@@ -1,0 +1,29 @@
+{
+  "name": "@fintava/shared-tools",
+  "version": "1.0.0",
+  "description": "Shared development tools and utilities for Fintava Pay SDKs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "echo 'No build step required for shared tools'",
+    "test": "echo 'No tests for shared tools'",
+    "lint": "echo 'No linting for shared tools'",
+    "format": "echo 'No formatting for shared tools'",
+    "clean": "echo 'No clean step for shared tools'"
+  },
+  "keywords": [
+    "fintava",
+    "tools",
+    "utilities",
+    "development"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/a-short-dev/fintava.git",
+    "directory": "tools/shared"
+  },
+  "bugs": {
+    "url": "https://github.com/a-short-dev/fintava/issues"
+  },
+  "homepage": "https://github.com/a-short-dev/fintava#readme"
+}
